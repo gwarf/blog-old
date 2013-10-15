@@ -7,7 +7,7 @@ title: J'aime pas les piles
 subtitle: My lost place
 author: Baptiste Grenier
 simple_search: http://google.com/search
-description:
+description: The lost net home of another lost sysadmin/geek
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -64,7 +64,7 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 
 # Github repositories
 github_user: gwarf
-github_repo_count: 7
+github_repo_count: 5
 github_show_profile_link: true
 github_skip_forks: true
 
@@ -86,7 +86,7 @@ pinboard_user:
 pinboard_count: 3
 
 # Delicious
-delicious_user:
+delicious_user: gwarf
 delicious_count: 3
 
 # Disqus Comments
