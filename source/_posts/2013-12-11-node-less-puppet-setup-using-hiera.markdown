@@ -58,11 +58,36 @@ configuration or other specific rules/requirements)
 
 In order to be able to assign the role and location, custom facts were
 added (company_role and company_location), based on the content of a
-file that have to be available on the server. (see XXX for more)
+file  (/etc/company.conf) that have to be available on the server. (see
+XXX for more)
+
+``` sh /etc/company.conf
+role=puppet
+location=ki
+```
+
+``` ruby dist/site/lib/facter/gnbila-facts.rb
+require 'facter'
+
+if File.exist?('/etc/company.conf')
+  File.readlines('/etc/company.conf').each do |line|
+    if line =~ /^(.+)=(.+)$/
+      varname = "company" + $1.strip
+      value = $2.strip
+
+      Facter.add(varname) do
+        setcode { value }
+      end
+    end
+  end
+end
+
+# vim: set expandtab smarttab shiftwidth=2 tabstop=2 softtabstop=2 nocindent noautoindent:
+```
 
 ### Assigning class to nodes using hiera
 
-``` json hieradata/common.js
+``` json hieradata/common.json
 {
   /* Load default classes */
   "classes" : [
@@ -78,23 +103,43 @@ file that have to be available on the server. (see XXX for more)
     "ntp",
     "sudo",
   ],
+
+  /* NTP configuration  */
+  "ntp::server" : [
+      "0.fr.pool.ntp.org",
+      "1.fr.pool.ntp.org",
+      "2.fr.pool.ntp.org"
+  ],
+}
+
+/* vim: set et smarttab sw=2 ts=2 sts=2: */
 ```
 
-``` ruby site.pp
-# Load classes from hiera conf mergeing all classes for inclusion
+``` ruby manifests/site.pp
+# Load classes from hiera conf merging all classes for inclusion
 hiera_include('classes')
 ```
 
 ### Assigning defines to nodes using hiera
 
-``` json hieradata/common.js
+Defines parameters are stored in a hash, the key is the resource
+title and the value is a hash of define parameters.
+``` json hieradata/common.json
   "rsyslog_configs" : {
-    "iptables.conf" : {  "ensure" : "present", "source" : "puppet:///modules/site/rsyslog/rsyslog.d/iptables.conf" },
-    "puppet-agent.conf" : {  "ensure" : "present", "source" : "puppet:///modules/site/rsyslog/rsyslog.d/puppet-agent.conf" },
+    "iptables.conf" : {
+      "ensure" : "present",
+      "source" : "puppet:///modules/site/rsyslog/rsyslog.d/iptables.conf"
+    },
+    "puppet-agent.conf" : {
+      "ensure" : "present",
+      "source" : "puppet:///modules/site/rsyslog/rsyslog.d/puppet-agent.conf"
+      },
   },
 ```
 
-```
+Defines have to be instanciated calling create_resource with the
+retrieved defines configuration.
+``` ruby manifests.y/site.pp
 node default {
   # Retrieve rsyslog configurations
   $rsyslog_configs = hiera_hash('rsyslog_configs', {})
