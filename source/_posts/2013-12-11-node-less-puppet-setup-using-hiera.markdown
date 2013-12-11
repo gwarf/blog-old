@@ -68,7 +68,7 @@ file that have to be available on the server. (see XXX for more)
   "classes" : [
     "unix",
     "skel",
-    "requiredsoftware',
+    "requiredsoftware",
     "pamldap",
     "git",
     "liquidprompt",
@@ -89,7 +89,7 @@ hiera_include('classes')
 
 ``` json hieradata/common.js
   "rsyslog_configs" : {
-    "iptables.conf" {  "ensure" : "present", "source" : "puppet:///modules/site/rsyslog/rsyslog.d/iptables.conf" },
+    "iptables.conf" : {  "ensure" : "present", "source" : "puppet:///modules/site/rsyslog/rsyslog.d/iptables.conf" },
     "puppet-agent.conf" : {  "ensure" : "present", "source" : "puppet:///modules/site/rsyslog/rsyslog.d/puppet-agent.conf" },
   },
 ```
