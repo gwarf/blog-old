@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ""Puppet tests using Vagrant""
+title: "Puppet tests using Vagrant"
 date: 2013-12-10 13:45
 comments: true
 categories: puppet sysadmin vagrant

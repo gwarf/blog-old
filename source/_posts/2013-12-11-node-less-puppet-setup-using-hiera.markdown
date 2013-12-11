@@ -138,10 +138,10 @@ title and the value is a hash of define parameters.
 ```
 
 Defines have to be instanciated calling create_resource with the
-retrieved defines configuration.
+retrieved define configuration hash.
 ``` ruby manifests.y/site.pp
 node default {
-  # Retrieve rsyslog configurations
+  # Retrieve rsyslog configurations if any
   $rsyslog_configs = hiera_hash('rsyslog_configs', {})
   create_resources('rsyslog::config', $rsyslog_configs)
 }
