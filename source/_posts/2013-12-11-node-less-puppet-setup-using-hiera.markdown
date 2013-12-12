@@ -101,7 +101,7 @@ end
     "ruby::dev",
     "postfix",
     "ntp",
-    "sudo",
+    "sudo"
   ],
 
   /* NTP configuration  */
