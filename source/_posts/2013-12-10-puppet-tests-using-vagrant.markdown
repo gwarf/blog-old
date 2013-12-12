@@ -26,13 +26,10 @@ Read first
 * [VirtualBox](https://www.virtualbox.org/)
 * [Vagrant](http://www.vagrantup.com/)
 
-``` sh Installing VirtualBox and git on Archlinux
+``` sh Yaourting VirtualBox, git and Vagrant on Archlinux
 yaourt -S virtualbox virtualbox-guest-iso
 yaourt -S git
-```
-
-``` sh Installing vagrant using rubygems
-gem install vagrant
+yaourt -S vagrant
 ```
 
 ## VMs list
