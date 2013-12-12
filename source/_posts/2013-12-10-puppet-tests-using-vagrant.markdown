@@ -111,9 +111,22 @@ if [ $(hostname) = 'client' ]; then
 fi
 ```
 
-And the puppetmaster will be boostraped using the puppet apply provider.
+And the puppetmaster is boostraped using the puppet apply provider.
 The client will get its configuration from the puppetmaster using the
 puppet agent provider.
+
+Two directories from the host are made available to the guest, they
+contain the puppet modules that will be used for the puppetmaster
+bootstrap:
+* Local puppet modules are available in the relatvie ../../dist
+  directory
+* A local copy of the remote puppet modules managed using the Puppetfile
+  is made using r10k (using a symbolicaly linked Puppetfile)
+
+``` sh
+gem install r10k
+r10k -v INFO puppetfile install
+```
 
 ``` ruby Vagrantfile
 # -*- mode: ruby -*-
@@ -176,19 +189,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # TODO Configure server using puppet agent against the master vm
   end
 end
-```
-
-Here two directories from the host are made available to the guest, they
-contain the puppet modules that will be used for the puppetmaster
-bootstrap:
-* Local puppet modules are available in the relatvie ../../dist
-  directory
-* A local copy of the remote puppet modules managed using the Puppetfile
-  is made using r10k (using a symbolicaly linked Puppetfile)
-
-``` sh
-gem install r10k
-r10k -v INFO puppetfile install
 ```
 
 A copy of the hiera.yaml has been made with a custom datadir
