@@ -27,8 +27,8 @@ Read first
 * [Vagrant](http://www.vagrantup.com/)
 
 ``` sh Yaourting VirtualBox, git and Vagrant on Archlinux
-yaourt -S virtualbox virtualbox-guest-iso
 yaourt -S git
+yaourt -S virtualbox virtualbox-guest-iso
 yaourt -S vagrant
 ```
 
