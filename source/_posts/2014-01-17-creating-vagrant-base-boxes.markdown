@@ -3,7 +3,7 @@ layout: post
 title: ""Creating Vagrant Base boxes""
 date: 2014-01-17 10:34:56 +0100
 comments: true
-categories: vagrant box sl
+categories: vagrant box sl virtualbox devops
 ---
 
 ## Create a VM inside VirtualBox
@@ -18,7 +18,12 @@ categories: vagrant box sl
 ## Install the base system, as minimal as possible
 
 ### Scientific Linux 5
-* Retrieve ISOs CD 1 and 2 from:
+* Retrieve ISOs CD 1 and 2
+
+``` sh
+wget http://ftp1.scientificlinux.org/linux/scientific/5x/iso/x86_64/cd/SL.510.110513.CD.x86_64.disc{1,2}.iso
+```
+
 * Boot CD
 * Use basic video driver installation
 * Use default configuration
@@ -28,13 +33,22 @@ categories: vagrant box sl
 * Use vagrant as root password
 
 ### Scientific Linux 6
-* Retrieve netinstall ISO CD from:
+* Retrieve netinstall ISO CD
+
+``` sh
+wget http://ftp.scientificlinux.org/linux/scientific/6x/x86_64/iso/SL-64-x86_64-2013-03-18-boot.iso
+```
+
 * Boot CD
 * Use network install URL:
 * Use default configuration
 * Use vagrant as root password
 
-Debian 7: retrieve netinstall ISO CD from:
+Debian 7: retrieve netinstall ISO CD
+
+``` sh
+wget http://cdimage.debian.org/debian-cd/7.3.0/amd64/iso-cd/debian-7.3.0-amd64-netinst.iso
+```
 
 ## System configuration
 
@@ -122,16 +136,46 @@ kill -9 $$
 
 ACPI shutdown VM using VirtualBox Machine menu
 
-## Packing the box
+## Packing the boxes
 
 ### Scientific Linux 5
 
 ``` sh
 vagrant package --output sl5-64-VB436-nocm.box --base scientificlinux5
+vagrant package --output sl6-64-VB436-nocm.box --base scientificlinux6
 ```
 
-### Scientific Linux 6
+## Testing the boxes
 
 ``` sh
-vagrant package --output sl6-64-VB436-nocm.box --base scientificlinux6
+vagrant box add sl5-64-nocm sl5-64-VB436-nocm.box
+vagrant box add sl6-64-nocm sl6-64-VB436-nocm.box
+```
+
+``` sh
+mkdir ~/sl5-64-nocm-tests && cd $_
+vagrant init sl5-64-nocm
+vagrant up
+vagrant ssh
+ping -c 3 gnu.org
+sudo -s
+exit
+exit
+vagrant destroy -f
+cd ..
+rm -rf ~/sl5-64-nocm-tests
+```
+
+``` sh
+mkdir ~/sl6-64-nocm-tests && cd $_
+vagrant init sl6-64-nocm
+vagrant up
+vagrant ssh
+ping -c 3 gnu.org
+sudo -s
+exit
+exit
+vagrant destroy -f
+cd ..
+rm -rf ~/sl6-64-nocm-tests
 ```
