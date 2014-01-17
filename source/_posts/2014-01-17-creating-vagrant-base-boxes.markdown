@@ -108,12 +108,12 @@ service acpid start
 * Install required software for build the VirtualBox additions
 
 ``` sh
-yum install -y gcc makekernel-devel
+yum install -y gcc make kernel-devel
 ```
 
 * Build and install VirtualBox additions
 
-Error about OpenGL or Window System drivers are "normal"
+Error about OpenGL or Window System drivers are "normal".
 
 ``` sh
 mount /dev/cdrom /mnt
@@ -133,7 +133,7 @@ yum clean all
 kill -9 $$
 ```
 
-ACPI shutdown VM using VirtualBox Machine menu
+ACPI shutdown VM using VirtualBox Machine menu.
 
 ## Packing the boxes
 
