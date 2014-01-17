@@ -1,11 +1,10 @@
 ---
 layout: post
-title: ""Creating Vagrant Base boxes""
+title: "Creating Vagrant Base boxes"
 date: 2014-01-17 10:34:56 +0100
 comments: true
-categories: vagrant box sl virtualbox devops
+categories: vagrant box sl virtualbox devops sysadmin
 ---
-
 ## Create a VM inside VirtualBox
 
 * No usb
