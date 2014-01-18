@@ -15,7 +15,7 @@ one (Debian virtual machine) without loosing mails.
 
 * fetchmail (cron)
 
-``` SH
+``` sh
 crontab -e
 #*/3 * * * * $HOME/bin/getmymailnow > /dev/null
 ```
@@ -51,7 +51,7 @@ rm "$LOCKFILE"
 exit 0
 ```
 
-### Tools used
+### Tools used for local/virtual mail handling
 
 * Postfix
 * Dovecot
@@ -59,6 +59,7 @@ exit 0
 * roundcube
 * procmail
 * fetchmail
+* bind
 
 ## Initial step
 * Create required users on new server
@@ -75,14 +76,14 @@ All mails should now go to new server, and this one will relay mails to old serv
 * Make an initial copy of the mailstores to the new server using rsync
 
 ``` sh
-rsync -avz --stats ~baptiste/Maildir -e ssh baptiste@87.98.174.87:
+rsync -avz --stats ~plop/Maildir -e ssh plop@new.server.tld:
 ```
 
 * Validates that imap/dovecot is working as expected
 
 ``` sh
-openssl s_client -connect xxx.xxx.xxx:993
-a01 login lui the_PassWord
+openssl s_client -connect new.server.tld:993
+a01 login plop the_PassWord
 a02 SELECT INBOX
 a03 logout
 ```
@@ -109,7 +110,7 @@ check that you have a small DNS TTL)
 * Stops roundcube vhost on old server
 * Make an incremental copy of the mailstores, deleting no more present emails using rsync
 ``` sh
-rsync -avz --delete-after --stats ~baptiste/Maildir -e ssh baptiste@87.98.174.87:
+rsync -avz --delete-after --stats ~plop/Maildir -e ssh plop@new.server.tld:
 ```
 * Configure postfix on new server to disable relaying to old server
 * Switch IPs (or hostnames if not possible) to new server 
