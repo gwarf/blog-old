@@ -22,9 +22,6 @@ crontab -e
 
 ``` sh ~/bin/getmymailnow
 #!/bin/sh
-#
-#/usr/bin/fetchmail -a -s -m "/usr/bin/procmail -d %T" 2&>1 /dev/null
-
 LOCKFILE="$0.lock"
 PATH="/bin:/usr/bin"
 
@@ -38,12 +35,10 @@ if [ -f "$LOCKFILE" ]; then
   fi
 fi
 
-/usr/local/bin/fetchmail -a -s -m "/usr/local/bin/procmail -d %T" 2>&1
+fetchmail -a -s -m "procmail -d %T" 2>&1
 
 echo $! > $LOCKFILE
-
 wait
-
 rm "$LOCKFILE"
 
 #/usr/bin/gotmail
