@@ -65,7 +65,22 @@ exit 0
 * Create required users on new server
 * Configure postfix on new server as it was on old one
   * remove mail domain from mydestination to old server
-  * set relay_domain for mail domain to old server
+  * set relayhost to old server
+
+* If different domain should be relayed to different places:
+``` sh /etc/postfix/main.cf
+transport_maps = hash:/etc/postfix/transport_maps
+```
+
+``` sh /etc/postfix/transport_maps
+domain.tld smtp:[mail.plop.tld]
+```
+
+``` sh
+postmap /etc/postfix/transport_maps
+service postfix restart
+```
+
 * Update MX in DNS conf to use new server
 
 All mails should now go to new server, and this one will relay mails to old server.
