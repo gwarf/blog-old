@@ -104,6 +104,12 @@ a03 logout
 
 * Install postgresql on new server
 * Migrate roundcube postgres database/user
+  * Database dump have to be updated as postgres user name is different
+
+``` sh
+sed -i 's/pgsql/postgres/g' roundcube.sql
+```
+
 * Install roundcube on new server
 * Update roundcube conf
 * Validate that roundcube is working as expected
@@ -122,11 +128,14 @@ check that you have a small DNS TTL)
 ``` sh
 rsync -avz --delete-after --stats ~plop/Maildir -e ssh plop@new.server.tld:
 ```
-* Configure postfix on new server to disable relaying to old server
+* Configure postfix on new server:
+  * disable relaying to old server
+  * fix mydestination
 * Switch IPs (or hostnames if not possible) to new server 
 * Update required hostnames in new server
 * Update roundcube postgres database
 * Enable email fetching on new server
+* Configure postfix on old server to relay mails to new server
 * Clean old server
 * Clean DNS conf
 
