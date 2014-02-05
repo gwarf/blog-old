@@ -1,0 +1,4 @@
+rvm use ruby-2.1.0@octopress --create
+alias veewee="bundle exec veewee"
+alias irb="bundle exec irb"
+alias rake="bundle exec rake"
