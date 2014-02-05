@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Centralized doc for devs"
+title: "Centralized docs for devs"
 date: 2014-02-05 14:18:51 +0100
 comments: true
 categories: 
