@@ -107,4 +107,12 @@ srm://<dpm2_server_name>/dpm/<dpm2_domain_name>/home/<vo_name>/generated/2013-09
 
 % lcg-lr lfn:/grid/<vo_name>/data/ADNI/IMAGES/128_S_4607/ADNI2/nG+ADNI2+128_S_4607+20121109+0847+S174741+3T0+T2ST+ORIG+V01.tar.bz2
 srm://<dpm2_server_name>/dpm/<dpm2_domain_name>/home/<vo_name>/generated/2013-09-20/file2e44af61-a0e0-4868-af30-d08d9e3a7a69
+
+% lcg-rep -d <dpm_server_name>
+lfn:/grid/<vo_name>/data/ADNI/IMAGES/128_S_4607/ADNI2/nG+ADNI2+128_S_4607+20121109+0847+S174741+3T0+T2ST+ORIG+V01.tar.bz2
+
+% lcg-lr
+% lfn:/grid/<vo_name>/data/ADNI/IMAGES/128_S_4607/ADNI2/nG+ADNI2+128_S_4607+20121109+0847+S174741+3T0+T2ST+ORIG+V01.tar.bz2
+srm://<dpm_server_name>/dpm/<dpm_domain_name>/home/<vo_name>/generated/2014-02-12/filecb922278-02c3-4642-b085-0f3695c9aaee
+srm://<dpm2_server_name>/dpm/<dpm2_domain_name>/home/<vo_name>/generated/2013-09-20/file2e44af61-a0e0-4868-af30-d08d9e3a7a69
 ```
