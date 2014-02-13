@@ -56,7 +56,7 @@ There is no automatic way of cleaning ghost entries, and in order to
 retrieve the corresponding LFN it is required to directly access the LFC
 database.
 
-``` SQL
+``` sql
 SELECT Cns_file_metadata.fileid,guid,name
   FROM Cns_file_metadata
   INNER JOIN Cns_file_replica
