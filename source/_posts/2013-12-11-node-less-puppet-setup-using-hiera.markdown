@@ -89,7 +89,6 @@ end
 
 ``` json hieradata/common.json
 {
-  /* Load default classes */
   "classes" : [
     "unix",
     "skel",
@@ -104,15 +103,12 @@ end
     "sudo"
   ],
 
-  /* NTP configuration  */
   "ntp::server" : [
       "0.fr.pool.ntp.org",
       "1.fr.pool.ntp.org",
       "2.fr.pool.ntp.org"
   ],
 }
-
-/* vim: set et smarttab sw=2 ts=2 sts=2: */
 ```
 
 ``` ruby manifests/site.pp
@@ -141,6 +137,9 @@ Defines have to be instanciated calling create_resource with the
 retrieved define configuration hash.
 ``` ruby manifests.y/site.pp
 node default {
+  # Load classes from hiera conf merging all classes for inclusion
+  hiera_include('classes')
+
   # Retrieve rsyslog configurations if any
   $rsyslog_configs = hiera_hash('rsyslog_configs', {})
   create_resources('rsyslog::config', $rsyslog_configs)
