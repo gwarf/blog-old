@@ -27,7 +27,7 @@ node default {
 
 The following won't work:
 
-``` ruby common.yaml
+``` yaml common.yaml
 services:
   mysql:
     ensure: 'running'
@@ -36,7 +36,7 @@ services:
 
 Nor the following:
 
-``` ruby common.yaml
+``` yaml common.yaml
 services:
   mysql:
     ensure: 'running'
@@ -45,7 +45,7 @@ services:
 
 But the following two syntaxes will work:
 
-``` ruby common.yaml
+``` yaml common.yaml
 ---
 classes:
   - 'puppet::agent'
@@ -58,7 +58,7 @@ services:
     require: Package[mysql-server]
 ```
 
-``` ruby common.yaml
+``` yaml common.yaml
 ---
 classes:
   - 'puppet::agent'
