@@ -12,6 +12,19 @@ troubles.
 If the syntax is not correct the traditionnal ```Could not find
 dependency``` error message will be displayed.
 
+
+``` ruby site.pp
+node default {
+  hiera_include ('classes', [])
+
+  $packages = hiera_hash('packages', {})
+  create_resources('package', $packages)
+
+  $services = hiera_hash('services', {})
+  create_resources('service', $services)
+}
+```
+
 The following won't work:
 
 ``` ruby common.yaml
