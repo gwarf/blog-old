@@ -53,14 +53,15 @@ Stop the agent if it is running and clean the SSL dir.
 ``` sh
 service puppet stop
 rm -rf /var/lib/puppet/ssl/*
+```
 
 Launch the agent to generate a cert and wait for the cert to be signed.
 
-``` sh on the agent
+``` sh
 puppet agent -tv --waitforcert 60
 ```
 
-``` sh on the master
+``` sh Sign the certificate request on the master
 puppet cert list
 puppet cert sign xxx.xxx.xxx
 ```
