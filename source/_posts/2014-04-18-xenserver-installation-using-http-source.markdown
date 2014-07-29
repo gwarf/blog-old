@@ -9,12 +9,12 @@ categories:
 Small notes on installing XenServer using a remote installation source.
 See
 
-(Citrix Official Documentation)[http://support.citrix.com/proddocs/topic/xenserver/xs-wrapper.html]
+[Citrix Official Documentation](http://support.citrix.com/proddocs/topic/xenserver/xs-wrapper.html)
 for more.
 
 ## Downloading XenServer
 
-Log into (Citrix site)[https://www.citrix.com] as login is required in
+Log into [Citrix site](https://www.citrix.com) as login is required in
 order to see the Product Software entry into the Find Downloads tool.
 
 ## Extracting ISO content
