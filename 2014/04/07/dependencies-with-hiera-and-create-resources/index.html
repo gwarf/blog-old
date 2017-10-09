@@ -1,95 +1,126 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   
   <title>Dependencies with Hiera and create_resources. | J&#39;aime pas les piles</title>
+  <meta name="author" content="Baptiste Grenier">
+  
+  <meta name="description" content="The lost net home of another lost sysadmin/geek">
+  
+  
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="In a nodeless setup itis possible to manage dependencies between resources created bycreate_resources, but the syntax is quite strict and caused me sometroubles.If the syntax is not correct the tradit">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Dependencies with Hiera and create_resources.">
-<meta property="og:url" content="http://blog.bapt.name/2014/04/07/dependencies-with-hiera-and-create-resources/index.html">
-<meta property="og:site_name" content="J&#39;aime pas les piles">
-<meta property="og:description" content="In a nodeless setup itis possible to manage dependencies between resources created bycreate_resources, but the syntax is quite strict and caused me sometroubles.If the syntax is not correct the tradit">
-<meta property="og:updated_time" content="2017-10-09T01:02:42.819Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dependencies with Hiera and create_resources.">
-<meta name="twitter:description" content="In a nodeless setup itis possible to manage dependencies between resources created bycreate_resources, but the syntax is quite strict and caused me sometroubles.If the syntax is not correct the tradit">
+
+  <meta property="og:title" content="Dependencies with Hiera and create_resources."/>
+  <meta property="og:site_name" content="J&#39;aime pas les piles"/>
+
   
-    <link rel="alternate" href="/atom.xml" title="J&#39;aime pas les piles" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
+    <meta property="og:image" content=""/>
   
 
+  <link href="/favicon.png" rel="icon">
+
+  <link rel="alternate" href="/atom.xml" title="J&#39;aime pas les piles" type="application/atom+xml">
+
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config(
+    {
+      tex2jax: {inlineMath: [['$','$'], ['\(','\)']]},
+      TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+    }
+  );
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">J&#39;aime pas les piles</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">My lost place</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.bapt.name"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-dependencies-with-hiera-and-create-resources" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/04/07/dependencies-with-hiera-and-create-resources/" class="article-date">
-  <time datetime="2014-04-07T19:32:28.000Z" itemprop="datePublished">2014-04-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Dependencies with Hiera and create_resources.
-    </h1>
-  
 
-      </header>
+<body>
+    <div class="container">
+      <div class="left-col">
+        <div class="intrude-less">
+          <header id="header" class="inner">
+            <div class="profilepic">
+  <script src="/js/md5.js"></script>
+  <script type="text/javascript">
+    $(function(){
+	$('.profilepic').append(
+          "<img src='http://www.gravatar.com/avatar/"
+          + MD5("")
+          + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+    });
+  </script>
+</div><!-- profilepic -->
+<h1><a href="/">Baptiste Grenier</a></h1>
+<nav id="main-nav">
+  <ul class="main">
     
-    <div class="article-entry" itemprop="articleBody">
+      <li>
+      <a href="/about">About</a>
+      </li>
+    
+  </ul>
+  
+  <section class="aboutme">
+    <p>
+      The lost net home of another lost sysadmin/geek
+    </p>
+  </section>
+  
+</nav><!-- main-nav -->
+<nav id="sub-nav">
+  <div class="social">
+    
+      <a class="twitter" href="http://twitter.com/"
+         title="Twitter">Twitter</a>
+    
+    
+      <a class="github" href="http://github.com/"
+         title="Github">Github</a>
+    
+    
+        <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+    
+  </div>
+</nav><!-- sub-nav -->
+
+
+          <header>
+        </div><!-- intrude-less -->
+      </div><!-- left-col -->
+      <div class="mid-col">
+        <div class="mid-col-container">
+	    <div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  
+	<div class="meta">
+          
+<div class="date">
+
+<time datetime="2014-04-07T19:32:28.000Z"
       
-        <p>In a <a href="/blog/2013/12/11/node-less-puppet-setup-using-hiera">nodeless setup</a> it<br>is possible to manage dependencies between resources created by<br>create_resources, but the syntax is quite strict and caused me some<br>troubles.<br>If the syntax is not correct the traditionnal <figure class="highlight plain"><figcaption><span>not find</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">dependency``` error message will be displayed.</div><div class="line"></div><div class="line"></div><div class="line">``` ruby site.pp</div><div class="line">node default &#123;</div><div class="line">  hiera_include (&apos;classes&apos;, [])</div><div class="line"></div><div class="line">  $packages = hiera_hash(&apos;packages&apos;, &#123;&#125;)</div><div class="line">  create_resources(&apos;package&apos;, $packages)</div><div class="line"></div><div class="line">  $services = hiera_hash(&apos;services&apos;, &#123;&#125;)</div><div class="line">  create_resources(&apos;service&apos;, $services)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+      data-updated="true"
+       itemprop="datePublished">
+  2014-04-07
+</time>
+
+
+
+
+
+</div>
+
+	</div>
+        <h1 class="title" itemprop="name">Dependencies with Hiera and create_resources.</h1>
+      	<div class="entry-content" itemprop="articleBody"><p>In a <a href="/blog/2013/12/11/node-less-puppet-setup-using-hiera">nodeless setup</a> it<br>is possible to manage dependencies between resources created by<br>create_resources, but the syntax is quite strict and caused me some<br>troubles.<br>If the syntax is not correct the traditionnal <figure class="highlight plain"><figcaption><span>not find</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">dependency``` error message will be displayed.</div><div class="line"></div><div class="line"></div><div class="line">``` ruby site.pp</div><div class="line">node default &#123;</div><div class="line">  hiera_include (&apos;classes&apos;, [])</div><div class="line"></div><div class="line">  $packages = hiera_hash(&apos;packages&apos;, &#123;&#125;)</div><div class="line">  create_resources(&apos;package&apos;, $packages)</div><div class="line"></div><div class="line">  $services = hiera_hash(&apos;services&apos;, &#123;&#125;)</div><div class="line">  create_resources(&apos;service&apos;, $services)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>The following won’t work:</p>
 <figure class="highlight yaml"><figcaption><span>common.yaml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="attr">services:</span></div><div class="line"><span class="attr">  mysql:</span></div><div class="line"><span class="attr">    ensure:</span> <span class="string">'running'</span></div><div class="line"><span class="attr">    require:</span> <span class="string">Package['mysql-server']</span></div></pre></td></tr></table></figure>
 <p>Nor the following:</p>
@@ -98,130 +129,62 @@
 <figure class="highlight yaml"><figcaption><span>common.yaml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">classes:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">'puppet::agent'</span></div><div class="line"><span class="attr">packages:</span></div><div class="line"><span class="attr">  mysql-server:</span></div><div class="line"><span class="attr">    ensure:</span> <span class="string">'installed'</span></div><div class="line"><span class="attr">services:</span></div><div class="line"><span class="attr">  mysql:</span></div><div class="line"><span class="attr">    ensure:</span> <span class="string">'running'</span></div><div class="line"><span class="attr">    require:</span> <span class="string">Package[mysql-server]</span></div></pre></td></tr></table></figure>
 <figure class="highlight yaml"><figcaption><span>common.yaml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">classes:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">'puppet::agent'</span></div><div class="line"><span class="attr">packages:</span></div><div class="line"><span class="attr">  mysql-server:</span></div><div class="line"><span class="attr">    ensure:</span> <span class="string">'installed'</span></div><div class="line"><span class="attr">services:</span></div><div class="line"><span class="attr">  mysql:</span></div><div class="line"><span class="attr">    ensure:</span> <span class="string">'running'</span></div><div class="line"><span class="attr">    require:</span> <span class="string">'Package[mysql-server]'</span></div></pre></td></tr></table></figure>
 <p>See a full example running in Vagrant at <a href="https://github.com/gwarf/puppet-vagrant-playground" target="_blank" rel="external">https://github.com/gwarf/puppet-vagrant-playground</a></p>
+</div>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.bapt.name/2014/04/07/dependencies-with-hiera-and-create-resources/" data-id="cj8jh5zul000cujmd7xprxxpj" class="article-share-link">Partager</a>
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2014/04/10/regenerating-puppet-certificates/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Récent</strong>
-      <div class="article-nav-title">
-        
-          Regenerating puppet certificates.
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2014/02/26/resizing-a-vm-filesystem-from-xen-host/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Ancien</strong>
-      <div class="article-nav-title">Resizing a VM filesystem from a xen host</div>
-    </a>
-  
-</nav>
 
-  
 </article>
 
-</section>
-        
-          <aside id="sidebar">
+  <div class="share">
+  <div class="addthis_toolbox addthis_default_style ">
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Catégories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/archlinux-sysadmin-packaing/">archlinux sysadmin packaing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/devops-sysadmin-puppet/">devops sysadmin puppet</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grid-dev-sysadmin-python/">grid dev sysadmin python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-hiera-sysadmin/">puppet hiera sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-sysadmin-vagrant/">puppet sysadmin vagrant</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vagrant-box-sl-virtualbox-devops-sysadmin/">vagrant box sl virtualbox devops sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/xen-sysadmin/">xen sysadmin</a></li></ul>
-    </div>
+  
+  <a class="addthis_button_tweet"></a>
+  
+  
+  <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+  
+  
   </div>
+  <script type="text/javascript">
+    var addthis_config = {"data_track_addressbar":true};
+  </script>
+  <script type="text/javascript"
+          src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=">
+  </script>
+</div>
 
 
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a></li></ul>
-    </div>
-  </div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
-    <div class="widget">
-      <ul>
+</div>
+	</div>
+        <footer id="footer" class="inner">
+          Copyright © 2013 - Baptiste Grenier - Powered by <a href="https://github.com/tommy351/hexo">Hexo</a><br>
+- Ported theme <a href="https://github.com/nuklly/hexo-theme-greyshade">GreyShade</a> -
+        </footer>
         
-          <li>
-            <a href="/2017/10/09/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/29/rebuilding-a-package-using-abs/">Rebuilding a package using ABS</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/28/grid-scripting-in-python/">Grid scripting in python</a>
-          </li>
-        
-          <li>
-            <a href="/2014/04/18/xenserver-installation-using-http-source/">XenServer installation using http source.</a>
-          </li>
-        
-          <li>
-            <a href="/2014/04/10/regenerating-puppet-certificates/">Regenerating puppet certificates.</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 Baptiste Grenier<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/slash.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js"></script>
 
-  </div>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+
+      </div><!-- mid-col -->
+    </div><!-- container -->
 </body>
 </html>
