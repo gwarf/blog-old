@@ -107,55 +107,6 @@
           
 <div class="date">
 
-<time datetime="2017-10-09T01:02:08.019Z"
-      
-      data-updated="true"
-       itemprop="datePublished">
-  2017-10-09
-</time>
-
-
-
-
-
-</div>
-
-          
-
-
-          
-	</div>
-        <h1 class="title" itemprop="name">
-          <a href="/2017/10/09/hello-world/" itemprop="url">
-            Hello World</a>
-        </h1>
-        <div class="entry-content" itemprop="articleBody">
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        </div>
-
-
-</article>
-
-
-
-
-  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-  
-	<div class="meta">
-          
-<div class="date">
-
 <time datetime="2014-07-29T09:58:02.000Z"
       
       data-updated="true"
@@ -631,6 +582,135 @@
 <li><a href="http://www.helpmesh.net/" target="_blank" rel="external">http://www.helpmesh.net/</a></li>
 <li><a href="http://zealdocs.org/" target="_blank" rel="external">http://zealdocs.org/</a></li>
 </ul>
+
+          
+        </div>
+
+
+</article>
+
+
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  
+	<div class="meta">
+          
+<div class="date">
+
+<time datetime="2014-01-18T10:37:18.000Z"
+      
+      data-updated="true"
+       itemprop="datePublished">
+  2014-01-18
+</time>
+
+
+
+
+
+</div>
+
+          
+
+
+          
+	</div>
+        <h1 class="title" itemprop="name">
+          <a href="/2014/01/18/mail-server-migration/" itemprop="url">
+            Mail server migration</a>
+        </h1>
+        <div class="entry-content" itemprop="articleBody">
+          
+            <h2 id="Goal"><a href="#Goal" class="headerlink" title="Goal"></a>Goal</h2><p>Migrating a mail server from one server (FreeBSD physical server) to another<br>one (Debian virtual machine) without loosing mails.</p>
+<h2 id="Mail-server"><a href="#Mail-server" class="headerlink" title="Mail server"></a>Mail server</h2><h3 id="Retrieving-mails-from-other-email-providers"><a href="#Retrieving-mails-from-other-email-providers" class="headerlink" title="Retrieving mails from other email providers"></a>Retrieving mails from other email providers</h3><ul>
+<li>fetchmail (cron)</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">crontab -e</div><div class="line"><span class="comment">#*/3 * * * * $HOME/bin/getmymailnow &gt; /dev/null</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>~/bin/getmymailnow</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">LOCKFILE=<span class="string">"<span class="variable">$0</span>.lock"</span></div><div class="line">PATH=<span class="string">"/bin:/usr/bin"</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ -f <span class="string">"<span class="variable">$LOCKFILE</span>"</span> ]; <span class="keyword">then</span></div><div class="line">  PID=$(cat <span class="string">"<span class="variable">$LOCKFILE</span>"</span>)</div><div class="line">  <span class="keyword">if</span> ! ps <span class="variable">$PID</span> 2&gt; /dev/null; <span class="keyword">then</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Ignoring stalled lock file"</span> &gt;&amp;2</div><div class="line">  <span class="keyword">else</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"Script already running (PID=<span class="variable">$PID</span>)"</span> &gt;&amp;2</div><div class="line">    <span class="built_in">exit</span> 1</div><div class="line">  <span class="keyword">fi</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line">fetchmail -a -s -m <span class="string">"procmail -d %T"</span> 2&gt;&amp;1</div><div class="line"></div><div class="line"><span class="built_in">echo</span> $! &gt; <span class="variable">$LOCKFILE</span></div><div class="line"><span class="built_in">wait</span></div><div class="line">rm <span class="string">"<span class="variable">$LOCKFILE</span>"</span></div><div class="line"></div><div class="line"><span class="comment">#/usr/bin/gotmail</span></div><div class="line"></div><div class="line"><span class="built_in">exit</span> 0</div></pre></td></tr></table></figure>
+<h3 id="Tools-used-for-local-virtual-mail-handling"><a href="#Tools-used-for-local-virtual-mail-handling" class="headerlink" title="Tools used for local/virtual mail handling"></a>Tools used for local/virtual mail handling</h3><ul>
+<li>Postfix</li>
+<li>Dovecot</li>
+<li>Spamassassin</li>
+<li>roundcube</li>
+<li>procmail</li>
+<li>fetchmail</li>
+<li>bind</li>
+</ul>
+<h2 id="Initial-step"><a href="#Initial-step" class="headerlink" title="Initial step"></a>Initial step</h2><ul>
+<li>Create required users on new server</li>
+<li><p>Configure postfix on new server as it was on old one</p>
+<ul>
+<li>remove mail domain from mydestination to old server</li>
+<li>set relayhost to old server</li>
+</ul>
+</li>
+<li><p>If different domain should be relayed to different places:</p>
+<figure class="highlight sh"><figcaption><span>/etc/postfix/main.cf</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">transport_maps = <span class="built_in">hash</span>:/etc/postfix/transport_maps</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight sh"><figcaption><span>/etc/postfix/transport_maps</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">domain.tld smtp:[mail.plop.tld]</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">postmap /etc/postfix/transport_maps</div><div class="line">service postfix restart</div></pre></td></tr></table></figure>
+<ul>
+<li>Update MX in DNS conf to use new server</li>
+</ul>
+<p>All mails should now go to new server, and this one will relay mails to old server.</p>
+<ul>
+<li>Install dovecot on new server</li>
+<li>Migrate and update conf (<a href="http://wiki2.dovecot.org/Upgrading/2.0" target="_blank" rel="external">http://wiki2.dovecot.org/Upgrading/2.0</a>)</li>
+<li>Migrate/update required certificates</li>
+<li>Make an initial copy of the mailstores to the new server using rsync</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rsync -avz --stats ~plop/Maildir -e ssh plop@new.server.tld:</div></pre></td></tr></table></figure>
+<ul>
+<li>Validates that imap/dovecot is working as expected</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">openssl s_client -connect new.server.tld:993</div><div class="line">a01 login plop the_PassWord</div><div class="line">a02 SELECT INBOX</div><div class="line">a03 <span class="built_in">logout</span></div></pre></td></tr></table></figure>
+<ul>
+<li>Copy spamassassin conf (global/local) to new server (and review it)</li>
+<li>Copy procmailconf to new server (and review it)</li>
+<li><p>Copy fetchmail conf (global/local) to new server (and review it)</p>
+</li>
+<li><p>Install postgresql on new server</p>
+</li>
+<li>Migrate roundcube postgres database/user<ul>
+<li>Database dump have to be updated as postgres user name is different</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i <span class="string">'s/pgsql/postgres/g'</span> roundcube.sql</div></pre></td></tr></table></figure>
+<ul>
+<li>Install roundcube on new server</li>
+<li>Update roundcube conf</li>
+<li><p>Validate that roundcube is working as expected</p>
+</li>
+<li><p>Wait at least a week to ensure that DNS will be up-to-date with new MX (and<br>check that you have a small DNS TTL)</p>
+</li>
+<li>Update DNS entries for SPF</li>
+</ul>
+<h2 id="Final-step-including-small-downtime"><a href="#Final-step-including-small-downtime" class="headerlink" title="Final step - including small downtime"></a>Final step - including small downtime</h2><ul>
+<li>Stops email fetching on old server</li>
+<li>Stops postfix on old server</li>
+<li>Stops dovecot on old server</li>
+<li>Stops roundcube vhost on old server</li>
+<li><p>Make an incremental copy of the mailstores, deleting no more present emails using rsync</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rsync -avz --delete-after --stats ~plop/Maildir -e ssh plop@new.server.tld:</div></pre></td></tr></table></figure>
+</li>
+<li><p>Configure postfix on new server:</p>
+<ul>
+<li>disable relaying to old server</li>
+<li>fix mydestination</li>
+</ul>
+</li>
+<li>Switch IPs (or hostnames if not possible) to new server </li>
+<li>Update required hostnames in new server</li>
+<li>Update roundcube postgres database</li>
+<li>Enable email fetching on new server</li>
+<li>Configure postfix on old server to relay mails to new server</li>
+<li>Clean old server</li>
+<li>Clean DNS conf</li>
+</ul>
+<p>No emails should be lost as if the server is not available, the contacting<br>servers should hold and resend the mails.</p>
 
           
         </div>
