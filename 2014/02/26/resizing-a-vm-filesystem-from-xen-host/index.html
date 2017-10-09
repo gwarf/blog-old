@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Resizing a VM filesystem from a xen host | J&#39;aime pas les piles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Resizing the disk and filesystem of a VMI had to add more disk space to a Virtual Machine running underXenServer 6.0. In such situation I ususally do like this:  create a snapshot (if possible, someti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Resizing a VM filesystem from a xen host">
+<meta property="og:url" content="http://blog.bapt.name/2014/02/26/resizing-a-vm-filesystem-from-xen-host/index.html">
+<meta property="og:site_name" content="J&#39;aime pas les piles">
+<meta property="og:description" content="Resizing the disk and filesystem of a VMI had to add more disk space to a Virtual Machine running underXenServer 6.0. In such situation I ususally do like this:  create a snapshot (if possible, someti">
+<meta property="og:updated_time" content="2017-10-09T01:02:42.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Resizing a VM filesystem from a xen host">
+<meta name="twitter:description" content="Resizing the disk and filesystem of a VMI had to add more disk space to a Virtual Machine running underXenServer 6.0. In such situation I ususally do like this:  create a snapshot (if possible, someti">
+  
+    <link rel="alternate" href="/atom.xml" title="J&#39;aime pas les piles" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">J&#39;aime pas les piles</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">My lost place</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.bapt.name"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-resizing-a-vm-filesystem-from-xen-host" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/02/26/resizing-a-vm-filesystem-from-xen-host/" class="article-date">
+  <time datetime="2014-02-26T14:25:50.000Z" itemprop="datePublished">2014-02-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/xen-sysadmin/">xen sysadmin</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Resizing a VM filesystem from a xen host
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Resizing-the-disk-and-filesystem-of-a-VM"><a href="#Resizing-the-disk-and-filesystem-of-a-VM" class="headerlink" title="Resizing the disk and filesystem of a VM"></a>Resizing the disk and filesystem of a VM</h2><p>I had to add more disk space to a Virtual Machine running under<br>XenServer 6.0. In such situation I ususally do like this:</p>
+<ul>
+<li>create a snapshot (if possible, sometimes disk space makes it<br>impossible)</li>
+<li>increase the virtual disk size using XenCenter (running from a Windows<br>Virtual Machine…)</li>
+<li>boot Sysrescuecd and resize the filesystem using gparted</li>
+</ul>
+<p>But this time, due to some known and unknown magic particular things (VT<br>extensions disabled, ISO library avaialble on a remote NFS share with latency<br>problems… I wasn’t able to boot sysrescuecd (nor other recent Live CD I<br>tried), so one of my last option was to attach the VM’s virtual disk on the<br>xen host (another VM could have been used too), here are the steps:</p>
+<ul>
+<li>Find xen host uuid</li>
+<li>Find VM uuid</li>
+<li>Find VM’s disk VDI uuid</li>
+<li>Create a new VBD for the xen host to plug the VDI in</li>
+<li>Stop the VM</li>
+<li>Plug the VBD</li>
+<li>Resize the partition and filesystem</li>
+<li>unplug and destroy the VBD</li>
+<li>Restart the VM</li>
+</ul>
+<h3 id="Hands-on…"><a href="#Hands-on…" class="headerlink" title="Hands-on…"></a>Hands-on…</h3><p>From the xenserver shell:</p>
+<figure class="highlight sh"><figcaption><span>Finding the Xen host uuid</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hostuuid=$(xe vm-list name-label=<span class="string">'Control domain on host: xenserver-XXX'</span> \</div><div class="line">  | awk <span class="string">'/uuid/ &#123;print $5&#125;'</span>)</div><div class="line">xe vm-list uuid=<span class="variable">$hostuuid</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>Finding VM uuid</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vmuuid=$(xe vm-list name-label=xxx.domain.tld | awk <span class="string">'/uuid/ &#123;print $5&#125;'</span>)</div><div class="line">xe vm-list uuid=<span class="variable">$vmuuid</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>Finding VDI uuid (check labels, userdevice number)</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xe vm-disk-list uuid=<span class="variable">$vmuuid</span></div><div class="line">vdiuuid=xxxx-xxxx-xxx-xxx-xxxx</div><div class="line">xe vbd-list vdi-uuid=<span class="variable">$vdiuuid</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>Creating a VBD for the Xen host to plug the VDI in</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vbduuid=$(xe vbd-create device=0 vm-uuid=<span class="variable">$hostuuid</span> vdi-uuid=<span class="variable">$vdiuuid</span> \</div><div class="line">  bootable=<span class="literal">false</span> mode=RW <span class="built_in">type</span>=Disk)</div><div class="line">xe vbd-list vdi-uuid=<span class="variable">$vdiuuid</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>Plugging the VBD into the Xen host</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">xe vbd-plug uuid=<span class="variable">$vbduuid</span></div><div class="line">xe vbd-list vdi-uuid=<span class="variable">$vdiuuid</span></div></pre></td></tr></table></figure>
+<p>Now the virtual disk of the VM is seen as a local device (/dev/xvda) on<br>the xen host, it can be accessed using the standard fdisk, parted, mount<br>tools.</p>
+<p>At first I tried to use parted’s<br><a href="https://www.gnu.org/software/parted/manual/html_chapter/parted_toc.html#TOC25" target="_blank" rel="external">resize</a><br>command but it didn’t work, so I add to delete and recreate the<br>partition manually according to the cylinders.<br>(be sure to save the layout of the partitions before messing with<br>them…)<br>(and using tmux is highly recommended for such tasks.)</p>
+<figure class="highlight sh"><figcaption><span>Resizing the partition using parted</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">parted /dev/xvda                                                                                                                                [86/818]</div><div class="line">GNU Parted 1.8.1</div><div class="line">Using /dev/xvda</div><div class="line">Welcome to GNU Parted! Type <span class="string">'help'</span> to view a list of commands.</div><div class="line">(parted) unit s                                                           </div><div class="line">(parted) <span class="built_in">print</span>                                                            </div><div class="line"></div><div class="line">Model: Xen Virtual Block Device (xvd)</div><div class="line">Disk /dev/xvda: 83886079s</div><div class="line">Sector size (logical/physical): 512B/512B</div><div class="line">Partition Table: msdos</div><div class="line"></div><div class="line">Number  Start  End        Size       Type     File system  Flags</div><div class="line"> 1      2048s  15988735s  15986688s  primary  ext3         boot </div><div class="line"></div><div class="line">(parted) rm 1                                                             </div><div class="line">(parted) mkpart</div><div class="line">Partition <span class="built_in">type</span>?  primary/extended? primary</div><div class="line">File system <span class="built_in">type</span>?  [ext2]? ext3                                           </div><div class="line">Start? 2048s</div><div class="line">End? 83886078s</div><div class="line">(parted) <span class="built_in">print</span>                                                            </div><div class="line"></div><div class="line">Model: Xen Virtual Block Device (xvd)</div><div class="line">Disk /dev/xvda: 83886079s</div><div class="line">Sector size (logical/physical): 512B/512B</div><div class="line">Partition Table: msdos</div><div class="line"></div><div class="line">Number  Start  End        Size       Type     File system  Flags</div><div class="line"> 1      2048s  83886078s  83884031s  primary  ext3              </div><div class="line"></div><div class="line">(parted) toggle 1 boot</div><div class="line">(parted) <span class="built_in">print</span></div><div class="line"></div><div class="line">Model: Xen Virtual Block Device (xvd)</div><div class="line">Disk /dev/xvda: 83886079s</div><div class="line">Sector size (logical/physical): 512B/512B</div><div class="line">Partition Table: msdos</div><div class="line"></div><div class="line">Number  Start  End        Size       Type     File system  Flags</div><div class="line"> 1      2048s  83886078s  83884031s  primary  ext3         boot </div><div class="line"></div><div class="line">(parted) quit                                                             </div><div class="line">Information: Don<span class="string">'t forget to update /etc/fstab, if necessary.</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>Resizing the filesystem using resize2fs</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">resize2fs /dev/xvda1    </div><div class="line">resize2fs 1.39 (29-May-2006)</div><div class="line">Resizing the filesystem on /dev/xvda1 to 10485503 (4k) blocks.</div><div class="line">The filesystem on /dev/xvda1 is now 10485503 blocks long</div><div class="line"></div><div class="line">fsck.ext3 -f /dev/xvda1</div><div class="line">e2fsck 1.39 (29-May-2006)</div><div class="line">Pass 1: Checking inodes, blocks, and sizes</div><div class="line">Pass 2: Checking directory structure</div><div class="line">Pass 3: Checking directory connectivity</div><div class="line">Pass 4: Checking reference counts</div><div class="line">Pass 5: Checking group summary information</div><div class="line">/dev/xvda1: 144207/2621440 files (3.3% non-contiguous), 1506575/10485503 blocks</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>Unplugging the VBD</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xe vbd-unplug uuid=<span class="variable">$vbduuid</span></div><div class="line">xe vbd-destroy uuid=<span class="variable">$vbduuid</span></div><div class="line">xe vbd-list vdi-uuid=<span class="variable">$vdiuuid</span></div></pre></td></tr></table></figure>
+<p>Done, the VM can now be restarted!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.bapt.name/2014/02/26/resizing-a-vm-filesystem-from-xen-host/" data-id="cj8jh5zuo000dujmd40ku6yri" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/04/07/dependencies-with-hiera-and-create-resources/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Dependencies with Hiera and create_resources.
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/02/14/starting-to-play-with-puppet-enterprise/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Starting to Play with Puppet Enterprise</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/archlinux-sysadmin-packaing/">archlinux sysadmin packaing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/devops-sysadmin-puppet/">devops sysadmin puppet</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grid-dev-sysadmin-python/">grid dev sysadmin python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-hiera-sysadmin/">puppet hiera sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-sysadmin-vagrant/">puppet sysadmin vagrant</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vagrant-box-sl-virtualbox-devops-sysadmin/">vagrant box sl virtualbox devops sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/xen-sysadmin/">xen sysadmin</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/09/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/29/rebuilding-a-package-using-abs/">Rebuilding a package using ABS</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/28/grid-scripting-in-python/">Grid scripting in python</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/18/xenserver-installation-using-http-source/">XenServer installation using http source.</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/10/regenerating-puppet-certificates/">Regenerating puppet certificates.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Baptiste Grenier<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

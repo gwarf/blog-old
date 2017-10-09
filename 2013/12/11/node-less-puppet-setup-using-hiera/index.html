@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Node-less puppet setup using hiera | J&#39;aime pas les piles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Why?Following a big puppet 2.7 =&amp;gt; 3.3 space jump (it took quite some timesto test/setup/adapt everything) I am trying to get a cleaner/sanerpuppet usage to avoid errors, duplication (allowing to ea">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node-less puppet setup using hiera">
+<meta property="og:url" content="http://blog.bapt.name/2013/12/11/node-less-puppet-setup-using-hiera/index.html">
+<meta property="og:site_name" content="J&#39;aime pas les piles">
+<meta property="og:description" content="Why?Following a big puppet 2.7 =&amp;gt; 3.3 space jump (it took quite some timesto test/setup/adapt everything) I am trying to get a cleaner/sanerpuppet usage to avoid errors, duplication (allowing to ea">
+<meta property="og:updated_time" content="2017-10-09T01:02:42.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node-less puppet setup using hiera">
+<meta name="twitter:description" content="Why?Following a big puppet 2.7 =&amp;gt; 3.3 space jump (it took quite some timesto test/setup/adapt everything) I am trying to get a cleaner/sanerpuppet usage to avoid errors, duplication (allowing to ea">
+  
+    <link rel="alternate" href="/atom.xml" title="J&#39;aime pas les piles" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">J&#39;aime pas les piles</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">My lost place</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.bapt.name"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-node-less-puppet-setup-using-hiera" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/12/11/node-less-puppet-setup-using-hiera/" class="article-date">
+  <time datetime="2013-12-11T21:15:00.000Z" itemprop="datePublished">2013-12-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/puppet-hiera-sysadmin/">puppet hiera sysadmin</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Node-less puppet setup using hiera
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h2><p>Following a big puppet 2.7 =&gt; 3.3 space jump (it took quite some times<br>to test/setup/adapt everything) I am trying to get a cleaner/saner<br>puppet usage to avoid errors, duplication (allowing to easily override<br>some conf for a specific deployment site at some specific location) and<br>to avoid slapping my lazyness with a truit.</p>
+<p>So I crawled a bit the web, and read a lot of different<br>posts/bugs/idas/rants, and did not find the golden-wonderfull-definitive<br>set-up guide, so here are the things that are on the way:</p>
+<ul>
+<li>Use hiera for storing the nodes configuration</li>
+<li>Assign classes using hiera (node-less setup?)</li>
+<li>Create roles and profiles modules to allow to encapsulate contents not<br>configurable using hiera</li>
+</ul>
+<h2 id="How"><a href="#How" class="headerlink" title="How?"></a>How?</h2><h3 id="Hiera-base-setup"><a href="#Hiera-base-setup" class="headerlink" title="Hiera base setup"></a>Hiera base setup</h3><p>Nothing to fancy here as shown in the hiera.yaml file, just an<br>environment-dependent datadir and a first draft of the hierarchy that<br>will be used.</p>
+<figure class="highlight yaml"><figcaption><span>hiera.yaml</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="string">:backends:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">json</span></div><div class="line"><span class="string">:json:</span></div><div class="line">  <span class="string">:datadir:</span> <span class="string">/etc/puppet/environments/%&#123;::environment&#125;/hieradata/</span></div><div class="line"><span class="string">:hierarchy:</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::fqdn&#125;</span>"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::company_role&#125;</span>"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::company_location&#125;</span>"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::virtual&#125;</span>"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::operatingsystem&#125;</span>-$&#123;lsbdistrelease&#125;"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::operatingsystem&#125;</span>-$&#123;lsbmajdistrelease&#125;"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::operatingsystem&#125;</span>"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">"<span class="template-variable">%&#123;::osfamily&#125;</span>"</span></div><div class="line"><span class="bullet">  -</span> <span class="string">common</span></div><div class="line"></div><div class="line"><span class="comment"># vim: set ft=yaml et smarttab sw=2 ts=2 sts=2:</span></div></pre></td></tr></table></figure>
+<h3 id="Custom-facts-for-hiera"><a href="#Custom-facts-for-hiera" class="headerlink" title="Custom facts for hiera"></a>Custom facts for hiera</h3><p>Here two hiera data sources are meant to be able to easily configure a<br>node according to its location or role. (location meaning more or<br>less a more or less physical location with some specific network<br>configuration or other specific rules/requirements)</p>
+<p>In order to be able to assign the role and location, custom facts were<br>added (company_role and company_location), based on the content of a<br>file  (/etc/company.conf) that have to be available on the server. (see<br>XXX for more)</p>
+<figure class="highlight sh"><figcaption><span>/etc/company.conf</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">role=puppet</div><div class="line">location=ki</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><figcaption><span>dist/site/lib/facter/gnbila-facts.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="string">'facter'</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> File.exist?(<span class="string">'/etc/company.conf'</span>)</div><div class="line">  File.readlines(<span class="string">'/etc/company.conf'</span>).each <span class="keyword">do</span> <span class="params">|line|</span></div><div class="line">    <span class="keyword">if</span> line =~ <span class="regexp">/^(.+)=(.+)$/</span></div><div class="line">      varname = <span class="string">"company"</span> + $1.strip</div><div class="line">      value = $2.strip</div><div class="line"></div><div class="line">      Facter.add(varname) <span class="keyword">do</span></div><div class="line">        setcode &#123; value &#125;</div><div class="line">      <span class="keyword">end</span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="comment"># vim: set expandtab smarttab shiftwidth=2 tabstop=2 softtabstop=2 nocindent noautoindent:</span></div></pre></td></tr></table></figure>
+<h3 id="Assigning-class-to-nodes-using-hiera"><a href="#Assigning-class-to-nodes-using-hiera" class="headerlink" title="Assigning class to nodes using hiera"></a>Assigning class to nodes using hiera</h3><figure class="highlight json"><figcaption><span>hieradata/common.json</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"classes"</span> : [</div><div class="line">    <span class="string">"unix"</span>,</div><div class="line">    <span class="string">"skel"</span>,</div><div class="line">    <span class="string">"requiredsoftware"</span>,</div><div class="line">    <span class="string">"pamldap"</span>,</div><div class="line">    <span class="string">"git"</span>,</div><div class="line">    <span class="string">"liquidprompt"</span>,</div><div class="line">    <span class="string">"ruby"</span>,</div><div class="line">    <span class="string">"ruby::dev"</span>,</div><div class="line">    <span class="string">"postfix"</span>,</div><div class="line">    <span class="string">"ntp"</span>,</div><div class="line">    <span class="string">"sudo"</span></div><div class="line">  ],</div><div class="line"></div><div class="line">  <span class="attr">"ntp::server"</span> : [</div><div class="line">      <span class="string">"0.fr.pool.ntp.org"</span>,</div><div class="line">      <span class="string">"1.fr.pool.ntp.org"</span>,</div><div class="line">      <span class="string">"2.fr.pool.ntp.org"</span></div><div class="line">  ],</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><figcaption><span>manifests/site.pp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Load classes from hiera conf merging all classes for inclusion</span></div><div class="line">hiera_include(<span class="string">'classes'</span>)</div></pre></td></tr></table></figure>
+<h3 id="Assigning-defines-to-nodes-using-hiera"><a href="#Assigning-defines-to-nodes-using-hiera" class="headerlink" title="Assigning defines to nodes using hiera"></a>Assigning defines to nodes using hiera</h3><p>Defines parameters are stored in a hash, the key is the resource<br>title and the value is a hash of define parameters.<br><figure class="highlight"><figcaption><span>hieradata/common.json</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">"rsyslog_configs" : &#123;</div><div class="line">  "iptables.conf" : &#123;</div><div class="line">    "ensure" : "present",</div><div class="line">    "source" : "puppet:///modules/site/rsyslog/rsyslog.d/iptables.conf"</div><div class="line">  &#125;,</div><div class="line">  "puppet-agent.conf" : &#123;</div><div class="line">    "ensure" : "present",</div><div class="line">    "source" : "puppet:///modules/site/rsyslog/rsyslog.d/puppet-agent.conf"</div><div class="line">    &#125;,</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>Defines have to be instanciated calling create_resource with the<br>retrieved define configuration hash.<br><figure class="highlight ruby"><figcaption><span>manifests.y/site.pp</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">node default &#123;</div><div class="line">  <span class="comment"># Load classes from hiera conf merging all classes for inclusion</span></div><div class="line">  hiera_include(<span class="string">'classes'</span>)</div><div class="line"></div><div class="line">  <span class="comment"># Retrieve rsyslog configurations if any</span></div><div class="line">  $rsyslog_configs = hiera_hash(<span class="string">'rsyslog_configs'</span>, &#123;&#125;)</div><div class="line">  create_resources(<span class="string">'rsyslog::config'</span>, $rsyslog_configs)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.bapt.name/2013/12/11/node-less-puppet-setup-using-hiera/" data-id="cj8jh5zub0002ujmdlo312ngf" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/01/17/creating-vagrant-base-boxes/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Creating Vagrant Base boxes
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/12/10/puppet-tests-using-vagrant/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Puppet tests using Vagrant</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/archlinux-sysadmin-packaing/">archlinux sysadmin packaing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/devops-sysadmin-puppet/">devops sysadmin puppet</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grid-dev-sysadmin-python/">grid dev sysadmin python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-hiera-sysadmin/">puppet hiera sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-sysadmin-vagrant/">puppet sysadmin vagrant</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vagrant-box-sl-virtualbox-devops-sysadmin/">vagrant box sl virtualbox devops sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/xen-sysadmin/">xen sysadmin</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/09/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/29/rebuilding-a-package-using-abs/">Rebuilding a package using ABS</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/28/grid-scripting-in-python/">Grid scripting in python</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/18/xenserver-installation-using-http-source/">XenServer installation using http source.</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/10/regenerating-puppet-certificates/">Regenerating puppet certificates.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Baptiste Grenier<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

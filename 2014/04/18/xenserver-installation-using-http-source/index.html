@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>XenServer installation using http source. | J&#39;aime pas les piles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Small notes on installing XenServer using a remote installation source.See Citrix Official Documentationfor more. Downloading XenServerLog into Citrix site as login is required inorder to see the Prod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XenServer installation using http source.">
+<meta property="og:url" content="http://blog.bapt.name/2014/04/18/xenserver-installation-using-http-source/index.html">
+<meta property="og:site_name" content="J&#39;aime pas les piles">
+<meta property="og:description" content="Small notes on installing XenServer using a remote installation source.See Citrix Official Documentationfor more. Downloading XenServerLog into Citrix site as login is required inorder to see the Prod">
+<meta property="og:updated_time" content="2017-10-09T01:02:42.822Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XenServer installation using http source.">
+<meta name="twitter:description" content="Small notes on installing XenServer using a remote installation source.See Citrix Official Documentationfor more. Downloading XenServerLog into Citrix site as login is required inorder to see the Prod">
+  
+    <link rel="alternate" href="/atom.xml" title="J&#39;aime pas les piles" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">J&#39;aime pas les piles</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">My lost place</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.bapt.name"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-xenserver-installation-using-http-source" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/04/18/xenserver-installation-using-http-source/" class="article-date">
+  <time datetime="2014-04-18T09:54:46.000Z" itemprop="datePublished">2014-04-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      XenServer installation using http source.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Small notes on installing XenServer using a remote installation source.<br>See</p>
+<p><a href="http://support.citrix.com/proddocs/topic/xenserver/xs-wrapper.html" target="_blank" rel="external">Citrix Official Documentation</a><br>for more.</p>
+<h2 id="Downloading-XenServer"><a href="#Downloading-XenServer" class="headerlink" title="Downloading XenServer"></a>Downloading XenServer</h2><p>Log into <a href="https://www.citrix.com" target="_blank" rel="external">Citrix site</a> as login is required in<br>order to see the Product Software entry into the Find Downloads tool.</p>
+<h2 id="Extracting-ISO-content"><a href="#Extracting-ISO-content" class="headerlink" title="Extracting ISO content"></a>Extracting ISO content</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mkdir xenserver-6.0.0_iso</div><div class="line">sudo mount -o loop XenServer-6.0.0-install-cd.iso xenserver-6.0.0_iso</div><div class="line">sudo mkdir -p /srv/mirror/xen/xenserver/6.0.0/</div><div class="line">sudo cp -r xenserver-6.0.0_iso/* /srv/mirror/xen/xenserver/6.0.0/</div></pre></td></tr></table></figure>
+<h2 id="Making-ISO-available-at-a-reachable-http-ftp-server"><a href="#Making-ISO-available-at-a-reachable-http-ftp-server" class="headerlink" title="Making ISO available at a reachable http/ftp server"></a>Making ISO available at a reachable http/ftp server</h2><p>Simple alias example for apache:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Alias /xen /srv/mirror/xen</div><div class="line">&lt;Directory /srv/mirror/xen&gt;</div><div class="line">   Options Indexes FollowSymLinks</div><div class="line">   AllowOverride None</div><div class="line">   Order deny,allow</div><div class="line">   deny from all</div><div class="line">   allow from all</div><div class="line">&lt;/Directory&gt;</div></pre></td></tr></table></figure>
+<p>Installation files will be available at <code>http://server.domain.tld/xen/xenserver/6.0.0/</code>.</p>
+<h2 id="Installing-XenServer"><a href="#Installing-XenServer" class="headerlink" title="Installing XenServer"></a>Installing XenServer</h2><ul>
+<li>Boot installation ISO on server</li>
+<li>Configure network</li>
+<li>Configure XenServer installer to retrieve files of http/ftp source</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.bapt.name/2014/04/18/xenserver-installation-using-http-source/" data-id="cj8jh5zut000hujmdyuussk4o" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/07/28/grid-scripting-in-python/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Grid scripting in python
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/04/10/regenerating-puppet-certificates/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Regenerating puppet certificates.</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/archlinux-sysadmin-packaing/">archlinux sysadmin packaing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/devops-sysadmin-puppet/">devops sysadmin puppet</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grid-dev-sysadmin-python/">grid dev sysadmin python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-hiera-sysadmin/">puppet hiera sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-sysadmin-vagrant/">puppet sysadmin vagrant</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vagrant-box-sl-virtualbox-devops-sysadmin/">vagrant box sl virtualbox devops sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/xen-sysadmin/">xen sysadmin</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/09/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/29/rebuilding-a-package-using-abs/">Rebuilding a package using ABS</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/28/grid-scripting-in-python/">Grid scripting in python</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/18/xenserver-installation-using-http-source/">XenServer installation using http source.</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/10/regenerating-puppet-certificates/">Regenerating puppet certificates.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Baptiste Grenier<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

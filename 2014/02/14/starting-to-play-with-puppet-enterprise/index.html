@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Starting to Play with Puppet Enterprise | J&#39;aime pas les piles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Why Puppet Enterprise?@work we are using puppet to manage our servers,currently we are using Puppet Open Source edition with great satisfaction. Being curious I always wanted to try the Puppet Enterpr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Starting to Play with Puppet Enterprise">
+<meta property="og:url" content="http://blog.bapt.name/2014/02/14/starting-to-play-with-puppet-enterprise/index.html">
+<meta property="og:site_name" content="J&#39;aime pas les piles">
+<meta property="og:description" content="Why Puppet Enterprise?@work we are using puppet to manage our servers,currently we are using Puppet Open Source edition with great satisfaction. Being curious I always wanted to try the Puppet Enterpr">
+<meta property="og:updated_time" content="2017-10-09T01:02:42.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Starting to Play with Puppet Enterprise">
+<meta name="twitter:description" content="Why Puppet Enterprise?@work we are using puppet to manage our servers,currently we are using Puppet Open Source edition with great satisfaction. Being curious I always wanted to try the Puppet Enterpr">
+  
+    <link rel="alternate" href="/atom.xml" title="J&#39;aime pas les piles" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">J&#39;aime pas les piles</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">My lost place</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.bapt.name"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-starting-to-play-with-puppet-enterprise" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/02/14/starting-to-play-with-puppet-enterprise/" class="article-date">
+  <time datetime="2014-02-14T10:26:33.000Z" itemprop="datePublished">2014-02-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/devops-sysadmin-puppet/">devops sysadmin puppet</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Starting to Play with Puppet Enterprise
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Why-Puppet-Enterprise"><a href="#Why-Puppet-Enterprise" class="headerlink" title="Why Puppet Enterprise?"></a>Why Puppet Enterprise?</h2><p><em><a href="https://gnubila.fr" target="_blank" rel="external">@work</a></em> we are using puppet to manage our servers,<br>currently we are using Puppet Open Source edition with great satisfaction.</p>
+<p>Being curious I always wanted to try the Puppet Enterprise edition, wich is no<br>more free, following my server migration (moving from a FreeBSD-based OVH<br>dedicated server to a less expensive kimsufi) I have to setup a new way of<br>managing my VMs, after some quick and opiniated reading, I dropped the idead to<br>use Chief and after a bit of additional readings I skipped Ansible too as I<br>like some puppet concepts like exported/collected resources allowint to setup a<br>dynamic environment.</p>
+<p>As Puppet Enterprise is free for managing up to 10 nodes (I don’t plan to have<br>more than 10 nodes for my personnal use ;) ) it turns out it is the perfect<br>occasion to git it a try, so let’s jump in!</p>
+<h2 id="Installing-Puppet-Enterprise"><a href="#Installing-Puppet-Enterprise" class="headerlink" title="Installing Puppet Enterprise"></a>Installing Puppet Enterprise</h2><p>Downloading <a href="http://info.puppetlabs.com/download-pe.html" target="_blank" rel="external">Puppet Enterprise</a><br>only requires to register with an email, a mail with the download information<br>for the different OS will be sent.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wget https://s3.amazonaws.com/pe-builds/released/3.1.3/puppet-enterprise-3.1.3-debian-7-amd64.tar.gz</div><div class="line">tar xf puppet-enterprise-3.1.3-debian-7-amd64.tar.gz</div><div class="line"><span class="built_in">cd</span> puppet-enterprise-3.1.3-debian-7-amd64/</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>Archive content</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div></pre></td><td class="code"><pre><div class="line">% tree</div><div class="line">.</div><div class="line">├── answers</div><div class="line">│   ├── agent_no_cloud.answer.sample</div><div class="line">│   ├── agent_with_cloud.answer.sample</div><div class="line">│   ├── console_only.answer.sample</div><div class="line">│   ├── full_suite.answer.sample</div><div class="line">│   ├── full_suite_existing_postgres.sample</div><div class="line">│   ├── full_suite_existing_remote_postgres.sample</div><div class="line">│   └── master_only.answer.sample</div><div class="line">├── db_import_export.rake</div><div class="line">├── erb</div><div class="line">│   ├── auth.conf.erb</div><div class="line">│   ├── autosign.conf.erb</div><div class="line">│   ├── cas_client_config.yml.erb</div><div class="line">│   ├── config.ru.erb</div><div class="line">│   ├── console_auth_config.yml.erb</div><div class="line">│   ├── console_auth_db_config.yml.erb</div><div class="line">│   ├── console_auth_log_config.yml</div><div class="line">│   ├── databases.erb</div><div class="line">│   ├── database.yml.erb</div><div class="line">│   ├── event_inspector_config.yml.erb</div><div class="line">│   ├── external_node.erb</div><div class="line">│   ├── license_status_config.yml.erb</div><div class="line">│   ├── puppet.conf.erb</div><div class="line">│   ├── puppetdashboard.conf.erb</div><div class="line">│   ├── puppetdb_master.pp.erb</div><div class="line">│   ├── puppetdb.pp.erb</div><div class="line">│   ├── puppetmaster.conf.erb</div><div class="line">│   ├── read_console_auth_db_config.erb</div><div class="line">│   ├── rewrite_rubycas_config.yml.erb</div><div class="line">│   ├── rubycas_config_upgrade_comments.txt</div><div class="line">│   ├── rubycas_config.yml.erb</div><div class="line">│   ├── settings.yml.erb</div><div class="line">│   └── site.pp.erb</div><div class="line">├── gpg</div><div class="line">│   └── GPG-KEY-puppetlabs</div><div class="line">├── LICENSE.txt</div><div class="line">├── modules</div><div class="line">│   ├── cprice404-inifile-0.10.3.tar.gz</div><div class="line">│   ├── install_modules.txt</div><div class="line">│   ├── puppetlabs-apt-1.1.0.tar.gz</div><div class="line">│   ├── puppetlabs-auth_conf-0.1.7.tar.gz</div><div class="line">│   ├── puppetlabs-firewall-0.3.0.tar.gz</div><div class="line">│   ├── puppetlabs-java_ks-1.1.0.tar.gz</div><div class="line">│   ├── puppetlabs-pe_accounts-2.0.1.tar.gz</div><div class="line">│   ├── puppetlabs-pe_common-0.1.0.tar.gz</div><div class="line">│   ├── puppetlabs-pe_mcollective-0.1.14.tar.gz</div><div class="line">│   ├── puppetlabs-pe_postgresql-0.0.5.tar.gz</div><div class="line">│   ├── puppetlabs-pe_puppetdb-0.0.11.tar.gz</div><div class="line">│   ├── puppetlabs-postgresql-2.5.0.tar.gz</div><div class="line">│   ├── puppetlabs-puppetdb-1.5.1.tar.gz</div><div class="line">│   ├── puppetlabs-puppet_enterprise-3.1.0.tar.gz</div><div class="line">│   ├── puppetlabs-reboot-0.1.2.tar.gz</div><div class="line">│   ├── puppetlabs-request_manager-0.0.10.tar.gz</div><div class="line">│   ├── puppetlabs-stdlib-3.2.0.tar.gz</div><div class="line">│   └── ripienaar-concat-0.2.0.tar.gz</div><div class="line">├── noask</div><div class="line">│   └── solaris-noask</div><div class="line">├── packages</div><div class="line">│   ├── debian-7-amd64</div><div class="line">│   │   ├── Packages</div><div class="line">│   │   ├── Packages.gz</div><div class="line">│   │   ├── pe-activemq_5.8.0-1puppet5_all.deb</div><div class="line">│   │   ├── pe-activerecord_2.3.17-1puppet2_all.deb</div><div class="line">│   │   ├── pe-activesupport_2.3.17-1puppet2_all.deb</div><div class="line">│   │   ├── pe-augeas_1.1.0-1puppet1_amd64.deb</div><div class="line">│   │   ├── pe-bundler_1.3.5-1puppet2_all.deb</div><div class="line">│   │   ├── pe-certificate-manager_0.4.7-1puppet1_all.deb</div><div class="line">│   │   ├── pe-certificate-manager-test_0.4.7-1puppet1_all.deb</div><div class="line">│   │   ├── pe-cloud-provisioner_1.1.4-puppet1_all.deb</div><div class="line">│   │   ├── pe-cloud-provisioner-libs_0.3.2-1puppet1_amd64.deb</div><div class="line">│   │   ├── pe-console_0.3.10-1puppet1_all.deb</div><div class="line">│   │   ├── pe-console-auth_1.2.21-1puppet1_all.deb</div><div class="line">│   │   ├── pe-console-test_0.3.10-1puppet1_all.deb</div><div class="line">│   │   ├── pe-event-inspector_0.1.0-1puppet1_all.deb</div><div class="line">│   │   ├── pe-facter_1.7.3.1-1puppet1_amd64.deb</div><div class="line">│   │   ├── pe-hiera_1.2.2.1-1puppet1_all.deb</div><div class="line">│   │   ├── pe-httpd_2.2.25-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-httpd-bin_2.2.25-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-httpd-common_2.2.25-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-httpd-doc_2.2.25-1puppet4_all.deb</div><div class="line">│   │   ├── pe-httpd-mpm-worker_2.2.25-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-httpd-prefork-dev_2.2.25-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-httpd-utils_2.2.25-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-java_1.7.0.19-1puppet1_amd64.deb</div><div class="line">│   │   ├── pe-libevent_2.0.13-1puppet3_amd64.deb</div><div class="line">│   │   ├── pe-libevent-devel_2.0.13-1puppet3_amd64.deb</div><div class="line">│   │   ├── pe-libyaml_0.1.4-1puppet3_amd64.deb</div><div class="line">│   │   ├── pe-license_0.1.1-1puppet1_all.deb</div><div class="line">│   │   ├── pe-license-status_0.1.5-1puppet1_all.deb</div><div class="line">│   │   ├── pe-license-status-test_0.1.5.1-1puppet1_all.deb</div><div class="line">│   │   ├── pe-live-management_1.2.16-1puppet1_all.deb</div><div class="line">│   │   ├── pe-mcollective_2.2.4-1puppet2_all.deb</div><div class="line">│   │   ├── pe-mcollective-client_2.2.4-1puppet2_all.deb</div><div class="line">│   │   ├── pe-mcollective-common_2.2.4-1puppet2_all.deb</div><div class="line">│   │   ├── pe-memcached_1.4.7-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-memcached-devel_1.4.7-1puppet4_amd64.deb</div><div class="line">│   │   ├── pe-passenger_4.0.18-1puppet3_amd64.deb</div><div class="line">│   │   ├── pe-postgresql_9.2.4-2puppet5_amd64.deb</div><div class="line">│   │   ├── pe-postgresql-contrib_9.2.4-2puppet5_amd64.deb</div><div class="line">│   │   ├── pe-postgresql-devel_9.2.4-2puppet5_amd64.deb</div><div class="line">│   │   ├── pe-postgresql-server_9.2.4-2puppet5_amd64.deb</div><div class="line">│   │   ├── pe-puppet_3.3.3.2-1puppet1_all.deb</div><div class="line">│   │   ├── pe-puppet-dashboard_2.0.14-1puppet1_amd64.deb</div><div class="line">│   │   ├── pe-puppetdb_1.5.1.pe-1puppetlabs1_all.deb</div><div class="line">│   │   ├── pe-puppetdb-terminus_1.5.1.pe-1puppetlabs1_all.deb</div><div class="line">│   │   ├── pe-puppet-enterprise-release_3.1.3-1puppet1_all.deb</div><div class="line">│   │   ├── pe-puppet-license-cli_0.1.6-1puppet1_all.deb</div><div class="line">│   │   ├── pe-puppet-server_3.3.3.2-1puppet1_all.deb</div><div class="line">│   │   ├── pe-ruby_1.9.3.448-1puppet5_amd64.deb</div><div class="line">│   │   ├── pe-ruby-augeas_0.5.0-1puppet2_amd64.deb</div><div class="line">│   │   ├── pe-rubycas-server_1.1.15-1puppet1_all.deb</div><div class="line">│   │   ├── pe-rubygem-deep-merge_1.0.0-1puppet1_all.deb</div><div class="line">│   │   ├── pe-rubygem-net-ssh_2.1.4-1puppet2_all.deb</div><div class="line">│   │   ├── pe-rubygem-rack_1.4.5-1puppet2_all.deb</div><div class="line">│   │   ├── pe-rubygem-sequel_3.47.0-1puppet1_all.deb</div><div class="line">│   │   ├── pe-rubygem-stomp_1.2.9-1puppet1_all.deb</div><div class="line">│   │   ├── pe-ruby-ldap_0.9.12-1puppet2_amd64.deb</div><div class="line">│   │   ├── pe-ruby-mysql_2.8.2-1puppet2_amd64.deb</div><div class="line">│   │   ├── pe-ruby-rgen_0.6.5-1puppet1_all.deb</div><div class="line">│   │   ├── pe-ruby-shadow_2.2.0-1puppet3_amd64.deb</div><div class="line">│   │   ├── pe-ruby-stomp_1.2.9-1puppet2_all.deb</div><div class="line">│   │   ├── pe-tanukiwrapper_3.5.9-1puppet5_amd64.deb</div><div class="line">│   │   ├── Release</div><div class="line">│   │   └── Release.gpg</div><div class="line">│   └── debian-7-amd64-package-versions.json</div><div class="line">├── puppet-enterprise-installer</div><div class="line">├── puppet-enterprise-uninstaller</div><div class="line">├── README.markdown</div><div class="line">├── support</div><div class="line">├── supported_platforms</div><div class="line">├── util</div><div class="line">│   └── pe-man</div><div class="line">├── utilities</div><div class="line">└── VERSION</div><div class="line"></div><div class="line">8 directories, 126 files</div><div class="line"></div><div class="line">$ du -schx ../puppet-enterprise-3.1.3-debian-7-amd64 </div><div class="line">254M    ../puppet-enterprise-3.1.3-debian-7-amd64</div></pre></td></tr></table></figure>
+<p>Yep, that’s huge!</p>
+<p>In order to install the agent on my workstation (running<br><a href="https://archlinux.org" target="_blank" rel="external">Archlinux</a>) I downloaded the non packaged *nix flavour,<br>which is 3.6GB fat!</p>
+<p>I will see later if thre is an alternate way.</p>
+<h2 id="Installation-steps"><a href="#Installation-steps" class="headerlink" title="Installation steps"></a>Installation steps</h2><p>According to<br><a href="http://docs.puppetlabs.com/pe/latest/install_system_requirements.html" target="_blank" rel="external">Puppet Enterprise documentation</a><br>it is required to follow the following deployment order:</p>
+<ul>
+<li>Puppet Master</li>
+<li>Database Support/PuppetDB</li>
+<li>Console</li>
+<li>Agents</li>
+</ul>
+<p>The puppet master will be installed on the same node as the puppetdb and web<br>console.</p>
+<p>Other nodes will only be agents.</p>
+<h3 id="Creating-the-PostgreSQL-databases"><a href="#Creating-the-PostgreSQL-databases" class="headerlink" title="Creating the PostgreSQL databases"></a>Creating the PostgreSQL databases</h3><p>The node already runs a postgresql database, so I won’t use puppet’s embedded one.</p>
+<figure class="highlight sh"><figcaption><span>PostregreSQL database creation</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">sudo su - postgres</div><div class="line">postgres@misc:~$ createuser -P -D -R -S pe-puppetdb</div><div class="line">Enter password <span class="keyword">for</span> new role:</div><div class="line">Enter it again: </div><div class="line">postgres@misc:~$ createdb -O pe-puppetdb -E UTF8 pe-puppetdb</div><div class="line">postgres@misc:~$ createuser -P -D -R -S console</div><div class="line">Enter password <span class="keyword">for</span> new role: </div><div class="line">Enter it again: </div><div class="line">postgres@misc:~$ createdb -O console -E UTF8 console</div><div class="line">postgres@misc:~$ createuser -P -D -R -S console_auth</div><div class="line">Enter password <span class="keyword">for</span> new role:</div><div class="line">Enter it again: </div><div class="line">postgres@misc:~$ createdb -O console_auth -E UTF8 console_auth</div><div class="line">postgres@misc:~$</div></pre></td></tr></table></figure>
+<h3 id="Launching-the-installation-of-the-puppet-master"><a href="#Launching-the-installation-of-the-puppet-master" class="headerlink" title="Launching the installation of the puppet master"></a>Launching the installation of the puppet master</h3><p>The installation script asks for configrations settings and is really<br>straight-forward, just be sure to set y to ask for master and puppetdb<br>installation.</p>
+<p>The script can also be called using a response file (see –help output).<br>A response file will be generated using the interactive choices.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./puppet-enterprise-installer</div></pre></td></tr></table></figure>
+<p>Once the installation is over rembember to open the following <em>3000, 8140, 61613</em> TCP ports.</p>
+<p>The web Console is now reachable at: <a href="https://host.tld.domain:3000" target="_blank" rel="external">https://host.tld.domain:3000</a></p>
+<p>Following is the answer file generated by the installer, it can be provided to<br>the installer like this:</p>
+<figure class="highlight sh"><figcaption><span>using an answer file</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./puppet-enterprise-installer -a answerfile</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>answer file for the puppetmaster</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">q_all_in_one_install=y</div><div class="line">q_backup_and_purge_old_configuration=n</div><div class="line">q_database_host=localhost</div><div class="line">q_database_install=n</div><div class="line">q_database_port=5432</div><div class="line">q_install=y</div><div class="line">q_pe_database=n</div><div class="line">q_puppet_cloud_install=n</div><div class="line">q_puppet_enterpriseconsole_auth_database_name=console_auth</div><div class="line">q_puppet_enterpriseconsole_auth_database_password=XXXXXXXXXX</div><div class="line">q_puppet_enterpriseconsole_auth_database_user=console_auth</div><div class="line">q_puppet_enterpriseconsole_auth_password=<span class="string">'XXXXXXXXXXXXXXXXX'</span></div><div class="line">q_puppet_enterpriseconsole_auth_user_email=baptiste@bapt.name</div><div class="line">q_puppet_enterpriseconsole_database_name=console</div><div class="line">q_puppet_enterpriseconsole_database_password=XXXXXXXXXX</div><div class="line">q_puppet_enterpriseconsole_database_user=console</div><div class="line">q_puppet_enterpriseconsole_httpd_port=3000</div><div class="line">q_puppet_enterpriseconsole_install=y</div><div class="line">q_puppet_enterpriseconsole_master_hostname=puppet.tld.domain</div><div class="line">q_puppet_enterpriseconsole_smtp_host=localhost</div><div class="line">q_puppet_enterpriseconsole_smtp_password=</div><div class="line">q_puppet_enterpriseconsole_smtp_port=25</div><div class="line">q_puppet_enterpriseconsole_smtp_use_tls=n</div><div class="line">q_puppet_enterpriseconsole_smtp_user_auth=n</div><div class="line">q_puppet_enterpriseconsole_smtp_username=</div><div class="line">q_puppet_symlinks_install=y</div><div class="line">q_puppetagent_certname=puppet.bapt.name</div><div class="line">q_puppetagent_install=y</div><div class="line">q_puppetagent_server=puppet.bapt.name</div><div class="line">q_puppetdb_database_name=pe-puppetdb</div><div class="line">q_puppetdb_database_password=XXXXXXXXXX</div><div class="line">q_puppetdb_database_user=pe-puppetdb</div><div class="line">q_puppetdb_hostname=puppet.bapt.name</div><div class="line">q_puppetdb_install=y</div><div class="line">q_puppetdb_port=8081</div><div class="line">q_puppetmaster_certname=puppet.tld.domain</div><div class="line">q_puppetmaster_dnsaltnames=puppet,puppet.tld.domain</div><div class="line">q_puppetmaster_enterpriseconsole_hostname=localhost</div><div class="line">q_puppetmaster_enterpriseconsole_port=3000</div><div class="line">q_puppetmaster_install=y</div><div class="line">q_run_updtvpkg=n</div><div class="line">q_vendor_packages_install=y</div></pre></td></tr></table></figure>
+<h3 id="Launching-the-installation-of-a-node"><a href="#Launching-the-installation-of-a-node" class="headerlink" title="Launching the installation of a node"></a>Launching the installation of a node</h3><p>On agent nodes you too have to download and extract the archive.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wget https://s3.amazonaws.com/pe-builds/released/3.1.3/puppet-enterprise-3.1.3-debian-7-amd64.tar.gz</div><div class="line">tar xf puppet-enterprise-3.1.3-debian-7-amd64.tar.gz</div><div class="line"><span class="built_in">cd</span> puppet-enterprise-3.1.3-debian-7-amd64/</div><div class="line">./puppet-enterprise-installer</div></pre></td></tr></table></figure>
+<p>Then the installation can be launched in the same way as for the master, but<br>this time all the defaults should be OK, I just put the complete FQDN for the<br>puppet server.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./puppet-enterprise-installer</div></pre></td></tr></table></figure>
+<p>Following is the answer file generated by the installer.</p>
+<figure class="highlight sh"><figcaption><span>answer file</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">q_all_in_one_install=n</div><div class="line">q_database_install=n</div><div class="line">q_fail_on_unsuccessful_master_lookup=y</div><div class="line">q_install=y</div><div class="line">q_puppet_cloud_install=n</div><div class="line">q_puppet_enterpriseconsole_install=n</div><div class="line">q_puppet_symlinks_install=y</div><div class="line">q_puppetagent_certname=host.domain.tld</div><div class="line">q_puppetagent_install=y</div><div class="line">q_puppetagent_server=puppet.domain.tld</div><div class="line">q_puppetca_install=n</div><div class="line">q_puppetdb_install=n</div><div class="line">q_puppetmaster_install=n</div><div class="line">q_run_updtvpkg=n</div><div class="line">q_vendor_packages_install=y</div></pre></td></tr></table></figure>
+<h2 id="Cleaning-Puppet-Enterprise-installation"><a href="#Cleaning-Puppet-Enterprise-installation" class="headerlink" title="Cleaning Puppet Enterprise installation"></a>Cleaning Puppet Enterprise installation</h2><figure class="highlight sh"><figcaption><span>uninstalling</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./puppet-enterprise-uninstaller -d -p -y</div></pre></td></tr></table></figure>
+<h2 id="First-steps"><a href="#First-steps" class="headerlink" title="First steps"></a>First steps</h2><p>Puppetlabs provides an <a href="http://docs.puppetlabs.com/pe/latest/quick_start.html" target="_blank" rel="external">helpful quick start guide</a>.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.bapt.name/2014/02/14/starting-to-play-with-puppet-enterprise/" data-id="cj8jh5zuk0009ujmdrhjsyned" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/02/26/resizing-a-vm-filesystem-from-xen-host/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Resizing a VM filesystem from a xen host
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/02/11/checking-se-and-lfc-consistency/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Checking SE and LFC consistency</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/archlinux-sysadmin-packaing/">archlinux sysadmin packaing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/devops-sysadmin-puppet/">devops sysadmin puppet</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/grid-dev-sysadmin-python/">grid dev sysadmin python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-hiera-sysadmin/">puppet hiera sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/puppet-sysadmin-vagrant/">puppet sysadmin vagrant</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/vagrant-box-sl-virtualbox-devops-sysadmin/">vagrant box sl virtualbox devops sysadmin</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/xen-sysadmin/">xen sysadmin</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">July 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">April 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">February 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">December 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/10/09/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/29/rebuilding-a-package-using-abs/">Rebuilding a package using ABS</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/28/grid-scripting-in-python/">Grid scripting in python</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/18/xenserver-installation-using-http-source/">XenServer installation using http source.</a>
+          </li>
+        
+          <li>
+            <a href="/2014/04/10/regenerating-puppet-certificates/">Regenerating puppet certificates.</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Baptiste Grenier<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
